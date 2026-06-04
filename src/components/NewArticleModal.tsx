@@ -7,7 +7,7 @@ import {
 import { Article, NewsCategory } from '../types';
 
 interface NewArticleModalProps {
-  isOpen: boolean;
+  isOpen?: boolean;
   onClose: () => void;
   onArticleCreated: (newArticle: Article) => void;
   apiConfigured: boolean;
@@ -52,12 +52,10 @@ export default function NewArticleModal({
   // Topic input state
   const [topic, setTopic] = useState('');
 
-  // Sync initial topic when modal opens
+  // Sync initial topic when modal gets rendered
   useEffect(() => {
-    if (isOpen) {
-      setTopic(typeof initialTopic === 'string' ? initialTopic : '');
-    }
-  }, [isOpen, initialTopic]);
+    setTopic(typeof initialTopic === 'string' ? initialTopic : '');
+  }, [initialTopic]);
   
   // Viral trends states
   const [viralTrends, setViralTrends] = useState<ViralTrend[]>([]);
@@ -224,11 +222,10 @@ export default function NewArticleModal({
     onClose();
   };
 
-  if (!isOpen) return null;
+  if (isOpen === false) return null;
 
   return (
-    <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-fade-in" id="article-generator-modal-root">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-fade-in" id="article-generator-modal-root">
         <motion.div
           initial={{ scale: 0.96, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
@@ -664,6 +661,5 @@ export default function NewArticleModal({
           )}
         </motion.div>
       </div>
-    </AnimatePresence>
   );
 }
