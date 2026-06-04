@@ -685,17 +685,14 @@ export default function App() {
       </footer>
 
       {/* WRITER GENERATOR MODAL */}
-      <AnimatePresence>
-        {isGeneratorOpen && (
-          <NewArticleModal 
-            onClose={() => setIsGeneratorOpen(false)}
-            onArticleCreated={handleArticleCreated}
-            apiConfigured={apiConfigured}
-            initialTopic={writerInitialTopic}
-            defaultKabupatenKota={selectedKabupatenKota}
-          />
-        )}
-      </AnimatePresence>
+      <NewArticleModal 
+        isOpen={isGeneratorOpen}
+        onClose={() => setIsGeneratorOpen(false)}
+        onArticleCreated={handleArticleCreated}
+        apiConfigured={apiConfigured}
+        initialTopic={writerInitialTopic}
+        defaultKabupatenKota={selectedKabupatenKota}
+      />
 
       {/* REVOLUTIONARY REDAKSI LOGIN MODAL WITH HIGH FIDELITY DESIGN */}
       <AnimatePresence>

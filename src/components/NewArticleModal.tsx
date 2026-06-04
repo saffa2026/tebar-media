@@ -52,10 +52,12 @@ export default function NewArticleModal({
   // Topic input state
   const [topic, setTopic] = useState('');
 
-  // Sync initial topic when modal gets rendered
+  // Sync initial topic when modal opens
   useEffect(() => {
-    setTopic(typeof initialTopic === 'string' ? initialTopic : '');
-  }, [initialTopic]);
+    if (isOpen) {
+      setTopic(typeof initialTopic === 'string' ? initialTopic : '');
+    }
+  }, [isOpen, initialTopic]);
   
   // Viral trends states
   const [viralTrends, setViralTrends] = useState<ViralTrend[]>([]);
@@ -222,17 +224,17 @@ export default function NewArticleModal({
     onClose();
   };
 
-  if (isOpen === false) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-fade-in" id="article-generator-modal-root">
-        <motion.div
-          initial={{ scale: 0.96, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.96, opacity: 0 }}
-          id="modal-card"
-          className="bg-white rounded-2xl w-full max-w-2xl border border-gray-150 shadow-2xl overflow-hidden flex flex-col relative"
-        >
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs" id="article-generator-modal-root">
+          <motion.div
+            initial={{ scale: 0.96, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.96, opacity: 0 }}
+            id="modal-card"
+            className="bg-white rounded-2xl w-full max-w-2xl border border-gray-150 shadow-2xl overflow-hidden flex flex-col relative"
+          >
           {/* Header */}
           <div className="p-5 bg-gradient-to-r from-[#2B2455] to-[#40367c] text-white flex items-center justify-between" id="modal-header">
             <div className="flex items-center gap-2.5">
@@ -659,7 +661,9 @@ export default function NewArticleModal({
               </div>
             </div>
           )}
-        </motion.div>
-      </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
   );
 }
