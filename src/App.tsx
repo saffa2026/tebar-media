@@ -151,12 +151,12 @@ export default function App() {
     setSelectedArticleId(newArticle.id);
   };
 
-  const handleOpenWriter = (initialTopic?: string) => {
+  const handleOpenWriter = (initialTopic?: any) => {
     if (!currentUser) {
       setLoginLockMessage('Harap masuk ruang redaksi terlebih dahulu untuk mengakses fitur kepenulisan jurnalisme AI!');
       setIsLoginModalOpen(true);
     } else {
-      setWriterInitialTopic(initialTopic || '');
+      setWriterInitialTopic(typeof initialTopic === 'string' ? initialTopic : '');
       setIsGeneratorOpen(true);
     }
   };

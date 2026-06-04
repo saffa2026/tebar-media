@@ -55,7 +55,7 @@ export default function NewArticleModal({
   // Sync initial topic when modal opens
   useEffect(() => {
     if (isOpen) {
-      setTopic(initialTopic);
+      setTopic(typeof initialTopic === 'string' ? initialTopic : '');
     }
   }, [isOpen, initialTopic]);
   
