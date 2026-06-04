@@ -108,8 +108,8 @@ export default function NewArticleModal({
     setViralScanError('');
     try {
       const response = await fetch('/api/news/viral-trends', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'GET',
+        headers: { 'Accept': 'application/json' },
       });
       const data = await response.json();
       if (response.ok) {

@@ -6,6 +6,19 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+function cleanJsonText(rawText: string): string {
+  let cleaned = rawText.trim();
+  if (cleaned.startsWith("```json")) {
+    cleaned = cleaned.substring(7);
+  } else if (cleaned.startsWith("```")) {
+    cleaned = cleaned.substring(3);
+  }
+  if (cleaned.endsWith("```")) {
+    cleaned = cleaned.substring(0, cleaned.length - 3);
+  }
+  return cleaned.trim();
+}
+
 async function startServer() {
   const app = express();
   const PORT = 3000;
@@ -110,7 +123,7 @@ PENTING: Tulis draf ini menggunakan PAKEM REDAKSI TEBARMEDIA DIGITAL:
   });
 
   // API Endpoint: Search actual viral news headlines across Indonesia using Search Grounding
-  app.post("/api/news/viral-trends", async (req, res) => {
+  const handleViralTrends = async (req: express.Request, res: express.Response) => {
     if (!hasApiKey) {
       // Standard static fallback list following the Tebarmedia package style
       const mockTrends = [
@@ -137,7 +150,7 @@ PENTING: Tulis draf ini menggunakan PAKEM REDAKSI TEBARMEDIA DIGITAL:
     }
 
     try {
-      const response = await ai.models.generateContent({
+      const generatePromise = ai.models.generateContent({
         model: "gemini-3.5-flash",
         contents: "Kumpulkan 3 berita viral, topik hangat, prestasi lokal, atau kejadian bernilai berita tinggi yang menonjol di daerah-daerah Indonesia (luar Jakarta/kota metropolitan utama diutamakan) dalam 1 minggu terakhir. Pastikan berita mengarah pada inovasi, lingkungan, kebudayaan, pencapaian warga, atau isu kemanusiaan inspiratif.",
         config: {
@@ -172,12 +185,19 @@ PENTING: Tulis draf ini menggunakan PAKEM REDAKSI TEBARMEDIA DIGITAL:
         }
       });
 
+      // Implement a 5-second fast fail timeout for the Satellite radar
+      const timeoutPromise = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error("Timeout stasiun radar satelit")), 5000)
+      );
+
+      const response = await Promise.race([generatePromise, timeoutPromise]);
       const text = response.text;
       if (!text) {
         throw new Error("Gagal mengambil tren berita dari Google Search grounding.");
       }
 
-      const trends = JSON.parse(text.trim());
+      const cleanedText = cleanJsonText(text);
+      const trends = JSON.parse(cleanedText);
       res.json({ trends, isMock: false });
     } catch (error: any) {
       console.warn("Gemini Search Grounding API failure / Quota reached, falling back gracefully. Error trace:", error.message || error);
@@ -205,7 +225,10 @@ PENTING: Tulis draf ini menggunakan PAKEM REDAKSI TEBARMEDIA DIGITAL:
 
       res.json({ trends: fallbackTrends, isMock: true, notice: "Akses satelit dialihkan ke rekaman tren lokal terkurasi karena stasiun utama penuh." });
     }
-  });
+  };
+
+  app.get("/api/news/viral-trends", handleViralTrends);
+  app.post("/api/news/viral-trends", handleViralTrends);
 
   // API Endpoint: Summarize News Article
   app.post("/api/news/summarize", async (req, res) => {
