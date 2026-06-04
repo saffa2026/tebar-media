@@ -1,0 +1,6 @@
+{
+  "name": "Tebarmedia",
+  "description": "Portal media online dengan slogan Informasi Merata, menyajikan berita terkini dan fitur kecerdasan buatan (AI) untuk menulis serta meringkas berita secara langsung.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
