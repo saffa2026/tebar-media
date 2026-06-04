@@ -290,6 +290,22 @@ export default function ArticleDetail({
             />
           </div>
 
+          {/* AI-Assisted Article Disclaimer Notice */}
+          <div 
+            className="flex items-start gap-3 bg-purple-50/70 border border-purple-100 rounded-2xl p-4 text-xs sm:text-sm text-purple-950 shadow-xs leading-relaxed"
+            id="detail-ai-disclaimer"
+          >
+            <div className="p-1 rounded-lg bg-[#7E007E]/10 text-[#7E007E] shrink-0 mt-0.5">
+              <Sparkles className="w-4 h-4 animate-pulse fill-[#7E007E]/10" />
+            </div>
+            <div className="space-y-1">
+              <span className="font-bold text-[#7E007E] block">Sirkulasi Otomatisasi AI:</span>
+              <span>
+                Naskah berita ini disusun dan disempurnakan berlandaskan draf lapangan secara otomatis oleh kecerdasan buatan Tebarmedia menggunakan model <strong className="text-[#2B2455]">Google Gemini AI</strong> untuk mengatasi keterlambatan pelaporan serta mewujudkan pemerataan informasi ke seluruh penjuru Nusantara.
+              </span>
+            </div>
+          </div>
+
           {/* Article Main Text Content */}
           <div className="font-serif text-[#2B2455] text-lg leading-relaxed space-y-6 max-w-none prose prose-purple border-b border-gray-100 pb-8" id="detail-text-body">
             {article.content.split('\n\n').map((paragraph, idx) => (

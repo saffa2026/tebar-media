@@ -11,6 +11,7 @@ interface NewArticleModalProps {
   onClose: () => void;
   onArticleCreated: (newArticle: Article) => void;
   apiConfigured: boolean;
+  initialTopic?: string;
 }
 
 const NEWSROOM_STEPS = [
@@ -40,13 +41,21 @@ export default function NewArticleModal({
   isOpen, 
   onClose, 
   onArticleCreated,
-  apiConfigured
+  apiConfigured,
+  initialTopic = ''
 }: NewArticleModalProps) {
   // Navigation tabs within writer modal
   const [activeTab, setActiveTab] = useState<'write' | 'viral'>('write');
   
   // Topic input state
   const [topic, setTopic] = useState('');
+
+  // Sync initial topic when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      setTopic(initialTopic);
+    }
+  }, [isOpen, initialTopic]);
   
   // Viral trends states
   const [viralTrends, setViralTrends] = useState<ViralTrend[]>([]);

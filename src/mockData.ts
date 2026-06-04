@@ -2,6 +2,151 @@ import { Article } from './types';
 
 export const INITIAL_ARTICLES: Article[] = [
   {
+    id: 'art-kepri-1',
+    title: 'Transformasi Digital Nongsa: Batam Bangun Pusat Layanan Data Hijau Terbengkalai Jadi Tercanggih se-ASEAN',
+    summary: 'Pemerintah Kota Batam bekerjasama dengan konsorsium global untuk meresmikan reorientasi Green Data Center bertenaga surya 150MW di Nongsa Digital Park.',
+    content: `BATAM — Kiprah Kota Batam sebagai "Jembatan Digital" antara Indonesia dan Singapura kini memasuki babak baru yang sangat strategis. Bertempat di kawasan Nongsa Digital Park (NDP) Kecamatan Nongsa, Kota Batam, diresmikan groundbreaking pembangunan fasilitas Green Data Center (pusat data ramah lingkungan) Tier IV berkapasitas total 150 Megawatt.
+
+Pusat data ini dirancang dengan standar kelestarian lingkungan tertinggi, memanfaatkan sepenuhnya suplai energi bersih dari pembangkit listrik tenaga surya terapung di waduk-waduk sekeliling pulau Batam, serta teknologi pendinginan sirkulasi air laut sirkuler yang hemat energi.
+
+Walikota Batam, dalam sambutannya menekankan pentingnya posisi Batam dalam konstelasi digital Asia Tenggara. "Kehadiran pusat data berskala raksasa ini membuktikan daya tarik Batam bukan lagi sekadar limpahan industri manufaktur tradisional, melainkan sebagai pusat talenta kreatif dan infrastruktur informasi berteknologi tinggi generasi baru," tegasnya.
+
+Lembaga Otorita Batam memproyeksikan investasi luar biasa ini akan mampu menyerap lebih dari 2.500 tenaga profesional TI lokal Indonesia dan mempercepat akselerasi konektivitas serat optik berkecepatan tinggi ke wilayah-wilayah pesisir Kepulauan Riau lainnya.`,
+    category: 'Teknologi',
+    author: 'Andi Saputra',
+    publishedAt: '4 Juni 2026',
+    readTime: '3 menit',
+    imageUrl: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&q=80&w=800',
+    likes: 189,
+    views: 620,
+    kabupatenKota: 'Kota Batam',
+    comments: [
+      {
+        id: 'ck-1',
+        user: 'Hendra Saputra',
+        avatar: 'HS',
+        content: 'Luar biasa Batam! Nongsa memang sangat strategis dekat dengan Singapura untuk pusat data hijau.',
+        timestamp: '1 jam yang lalu'
+      }
+    ]
+  },
+  {
+    id: 'art-kepri-2',
+    title: 'Pulau Penyengat Tanjungpinang Resmi Operasikan Armada Wisata Bertenaga Listrik Ramah Lingkungan',
+    summary: 'Dalam rangka menjaga kelestarian situs warisan dunia dan menekan emisi karbon di destinasi bersejarah, Pemkot Tanjungpinang meluncurkan 12 becak listrik pintar.',
+    content: `TANJUNGPINANG — Pulau Penyengat yang sarat akan warisan sejarah kegemilangan Kesultanan Riau-Lingga-Johor-Pahang kini bertransformasi menjadi destinasi wisata cagar budaya ramah lingkungan pionir di Kepulauan Riau. Dinas Pariwisata Kota Tanjungpinang secara resmi meluncurkan belasan armada becak lori bertenaga listrik murni untuk melayani wisatawan domestik maupun mancanegara yang berdatangan ke pulau tersebut.
+
+Langkah inovatif ini digagas demi melindungi kualitas udara di sekitar Kompleks Masjid Raya Sultan Riau, Makam Raja Ali Haji, serta benteng pertahanan bersejarah Bukit Kursi dari degradasi emisi gas buang kendaraan konvensional berbahan bakar fosil.
+
+"Penyengat adalah tanah suci sejarah budaya Melayu. Kita harus menjaganya dengan saksama. Dengan adanya armada lori listrik ini, para pelancong dapat mengitari pulau bersejarah ini dengan suasana sunyi, damai, tanpa kebisingan knalpot, serta bebas gas polusi," ujar perwakilan Dinas Pariwisata Tanjungpinang.
+
+Selain ramah lingkungan, becak lori listrik ini juga dilengkapi peranti pelantang audio pemandu otomatis (audio guide) multi-bahasa yang digarap bekerja sama dengan komunitas pemuda sadar wisata setempat untuk memaparkan narasi perjuangan dan sejarah agung Kepulauan Riau kepada para pengunjung sepanjang perjalanan.`,
+    category: 'Gaya Hidup',
+    author: 'Siti Sarah',
+    publishedAt: '3 Juni 2026',
+    readTime: '4 menit',
+    imageUrl: 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&q=80&w=800',
+    likes: 145,
+    views: 480,
+    kabupatenKota: 'Kota Tanjungpinang',
+    comments: []
+  },
+  {
+    id: 'art-kepri-3',
+    title: 'Hilirisasi Pasir Silika Bintan Mulai Kuasai Pasar Utama Pembuatan Kaca Panel Surya Global',
+    summary: 'Kawasan Industri Bintan berhasil melakukan ekspor perdana lembaran kaca ultra-tipis berbahan dasar silika lokal kualitas premium untuk rantai pasok pabrik modul surya dunia.',
+    content: `BINTAN — Kabupaten Bintan mencatatkan sejarah baru dalam peta rantai pasok energi bersih internasional. Pabrik pengolahan pasir kuarsa dan silika terintegrasi di pesisir utara Bintan berhasil merealisasikan pengapalan komersial pertama kaca pelindung surya fotovoltaik ultra-tipis berkekuatan tinggi ke beberapa pusat perakitan panel di Asia Timur dan Eropa Barat.
+
+Hilirisasi hilir tambang pasir silika lokal ini bernilai tambah tinggi, melipatgandakan nilai ekspor daerah hingga sepuluh kali lipat dibandingkan pengiriman komoditas mentah mentah tanpa pemrosesan pabrik pra-industri.
+
+Bupati Bintan menegaskan bahwa industri pengolahan ini menerapkan sirkulasi penggunaan air tertutup yang sangat ketat untuk meminimalisasi dampak risiko kerusakan ekologis laut sekitar. "Ini adalah komitmen kami di Kepulauan Riau untuk menyeleraskan kemajuan ekonomi pariwisata bahari dengan sektor manufaktur strategis ramah lingkungan. Kami memantau ketat standar amdal agar keindahan pantai pasir putih Bintan tetap asri," paparnya panjang lebar.`,
+    category: 'Ekonomi',
+    author: 'Dian Wahyudi',
+    publishedAt: '2 Juni 2026',
+    readTime: '3 menit',
+    imageUrl: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?auto=format&fit=crop&q=80&w=800',
+    likes: 99,
+    views: 330,
+    kabupatenKota: 'Kabupaten Bintan',
+    comments: []
+  },
+  {
+    id: 'art-kepri-4',
+    title: 'Rampungkan Waduk Sentral Karimun, Pasokan Air Bersih Pulau-Pulau Terluar Kepri Terjamin Aman',
+    summary: 'Proyek revitalisasi tanggul penahan dan distribusi pipa bawah air di Kabupaten Karimun akhirnya rampung untuk mengakhiri krisis air bersih tahunan masyarakat.',
+    content: `KARIMUN — Impian ribuan kepala keluarga di gugusan pulau-pulau kecil wilayah Kabupaten Karimun untuk menikmati aliran air bersih siap konsumsi sepanjang tahun akhirnya terwujud nyata. Balai Wilayah Sungai Sumatera secara resmi menyatakan proyek peningkatan kapasitas tampung Waduk Sentral Karimun dan instalasi pipa laut bawah air lintas pulau telah berfungsi penuh 100 persen.
+
+Selama ini, setiap kali musim kemarau panjang melanda, daerah Kepulauan Riau terpencil harus memesan tongkang pengangkut air tawar darurat dengan biaya tinggi. Dengan selesainya interkoneksi pipa tangguh berdiameter tebal ini, pasokan air domestik kini tersalurkan tanpa jeda secara aman langsung ke keran rumah tangga di pulau-pulau seberang.
+
+"Kami sangat gembira dan bersyukur. Sekarang kami tidak perlu lagi menampung air hujan setiap malam atau membeli air jeriken mahal untuk memenuhi kebutuhan masak bumbu dan mandi anak sekolah," ucap bapak Aris (51), nelayan di Pulau Kundur.`,
+    category: 'Nasional',
+    author: 'Rian Hidayat',
+    publishedAt: '1 Juni 2026',
+    readTime: '4 menit',
+    imageUrl: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&q=80&w=800',
+    likes: 121,
+    views: 390,
+    kabupatenKota: 'Kabupaten Karimun',
+    comments: []
+  },
+  {
+    id: 'art-kepri-5',
+    title: 'Peningkatan Sinyal Satelit 5G Sektor Perikanan Natuna Mengudara, Nelayan Terbantu Pantau Lokasi Ikan',
+    summary: 'Stasiun bumi satelit maritim terbaru di Kabupaten Natuna resmi aktif mengudara, mendukung nelayan tradisional melakukan navigasi dan mendeteksi biomassa laut dalam.',
+    content: `NATUNA — Nelayan di wilayah perbatasan laut Natuna Utara kini dibekali senjata teknologi digital mutakhir. Kementerian Komunikasi dan Informatika meluncurkan program pemanfaatan penerima sinyal broadband satelit maritim bertenaga ramah lingkungan untuk seluruh kapal penangkap ikan tradisional berkekuatan di bawah 10 GT di Natuna.
+
+Aplikasi jurnalisme nelayan cerdas "Sinar Bahari" yang tersemat pada ponsel tangguh nelayan ini mengandalkan input citra satelit radar untuk mendeteksi koordinat wilayah konsentrasi oseanografi tinggi yang kaya akan fitoplankton, sebagai indikasi berkumpulnya kawanan ikan Pelagis berharga ekonomis.
+
+"Dulu kami melaut menebak-nebak arah angin dan petunjuk arus visual saja, seringkali pulang dengan tangki bahan bakar solar habis tanpa membawa ikan. Sekarang dengan peta digital ini, kami bisa langsung meluncur ke titik sasaran secara akurat dan menghemat bahan bakar hingga setengahnya," tutur ketua rukun nelayan Ranai Barat.`,
+    category: 'Teknologi',
+    author: 'Andi Saputra',
+    publishedAt: '31 Mei 2026',
+    readTime: '3 menit',
+    imageUrl: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&q=80&w=800',
+    likes: 210,
+    views: 740,
+    kabupatenKota: 'Kabupaten Natuna',
+    comments: []
+  },
+  {
+    id: 'art-kepri-6',
+    title: 'Ekspor Kerapu Premium Anambas Tembus Pasar Hongkong Melalui Jalur Kargo Udara Langsung',
+    summary: 'Kabupaten Kepulauan Anambas memulai pengapalan kargo ekspor langsung hasil laut ikan kerapu macan segar berkualitas prima guna memaksimalkan devisa nelayan lokal.',
+    content: `KEPULAUAN ANAMBAS — Komoditas unggulan perairan laut dalam Kabupaten Kepulauan Anambas berupa ikan kerapu hidup berkualitas premium kini dapat dinikmati oleh para penikmat kuliner di Hongkong dan Macau dalam waktu kurang dari 8 jam sejak ditangkap dari keramba jaring apung nelayan. 
+
+Kargo penerbangan logistik sewaan langsung khusus dari Bandara Letung, Anambas, menuju bandara internasional Hongkong secara resmi diluncurkan perdana pekan ini. Jalur logistik kilat ini memotong rantai panjang distribusi laut tradisional yang biasanya membutuhkan waktu tempuh berhari-hari lewat jalur transit kapal kayu Batam maupun Singapura, yang kerap kali mengakibatkan penurunan kualitas kesegaran komoditas ekspor atau tingkat kematian ikan hidup di perjalanan.
+
+"Ini adalah babak bersejarah bagi nelayan budidaya Anambas. Dengan pengiriman udara langsung, tingkat kelangsungan hidup ikan kerapu hidup sampai di tempat tujuan mencapai 98 persen, sehingga nelayan kami dapat memperoleh harga penjualan maksimal tanpa potongan risiko susut," terang dinas kelautan setempat.`,
+    category: 'Ekonomi',
+    author: 'Sarah Malika',
+    publishedAt: '30 Mei 2026',
+    readTime: '3 menit',
+    imageUrl: 'https://images.unsplash.com/photo-1510172951991-859a69907ac4?auto=format&fit=crop&q=80&w=800',
+    likes: 112,
+    views: 290,
+    kabupatenKota: 'Kabupaten Kepulauan Anambas',
+    comments: []
+  },
+  {
+    id: 'art-kepri-7',
+    title: 'Kabupaten Lingga Alokasikan 12 Miliar Rupiah Demi Revitalisasi Sentra Sagu Tradisional Berkelanjutan',
+    summary: 'Langkah strategis dinas ketahanan pangan Lingga untuk mendukung diversifikasi karbohidrat lokal non-beras guna menyongsong kemandirian gizi daerah.',
+    content: `LINGGA — Kabupaten Lingga yang memiliki bentang kebun sagu rumbia luhur terluas di Kepapulauan Riau mengumumkan gelontoran program peremajaan sentra pengelolaan sagu rakyat secara masif seluas ratusan hektar. 
+
+Melalui stimulus pendanaan terfokus ini, pabrik-pabrik pengolahan parutan sagu basah tradisional milik kelompok tani daerah akan dimodernisasi menggunakan mesin parut peras centrifugasi bertenaga surya guna meningkatkan daya higienitas serta kuantitas rendemen tepung sagu kering hingga 40 persen.
+
+"Sagu Rumbia Lingga sejak lama terkenal dengan tekstur seratnya yang halus dan cita rasa gurih yang khas. Penganan khazanah melayu seperti sagu lenggang dan lakse harus terus kita lestarikan jalurnya sebagai benteng kedaulatan pangan tangguh mandiri regional non-beras," jelas staf ahli Ketahanan Pangan Kabupaten Lingga.`,
+    category: 'Sains',
+    author: 'Prof. Ahmad Siregar',
+    publishedAt: '29 Mei 2026',
+    readTime: '4 menit',
+    imageUrl: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&q=80&w=800',
+    likes: 85,
+    views: 240,
+    kabupatenKota: 'Kabupaten Lingga',
+    comments: []
+  },
+  {
     id: 'art-1',
     title: 'Digitalisasi Sawah Subak: Sensor IoT Bandung Tingkatkan Hasil Panen di Gianyar',
     summary: 'Petani tradisional di Gianyar bekerjasama dengan startup teknologi asal Bandung untuk memasang sensor kelembaban dan kualitas air berbasis Internet of Things (IoT) pada sistem irigasi Subak.',

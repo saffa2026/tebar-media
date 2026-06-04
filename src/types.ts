@@ -30,6 +30,7 @@ export interface Article {
   aiSummary?: string;
   comments: Comment[];
   isAiGenerated?: boolean;
+  kabupatenKota?: string;
 }
 
 export interface ChatMessage {

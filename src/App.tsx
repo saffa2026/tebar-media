@@ -3,7 +3,8 @@ import { AnimatePresence, motion } from 'motion/react';
 import { 
   Sparkles, Search, SlidersHorizontal, BookOpen, 
   MessageSquare, Layers, Newspaper, Heart, Send, Globe, ChevronRight,
-  LogIn, LogOut, Lock, User, Check, AlertCircle, Eye, EyeOff, LayoutDashboard, X
+  LogIn, LogOut, Lock, User, Check, AlertCircle, Eye, EyeOff, LayoutDashboard, X,
+  Cpu, MapPin, Compass, Anchor, ChevronDown
 } from 'lucide-react';
 
 import { Article, NewsCategory } from './types';
@@ -31,7 +32,14 @@ export default function App() {
   const [selectedArticleId, setSelectedArticleId] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<string>('Semua Berita');
   const [searchQuery, setSearchQuery] = useState('');
+  const [selectedKabupatenKota, setSelectedKabupatenKota] = useState<string | null>(null);
+  const [isDaerahDropdownOpen, setIsDaerahDropdownOpen] = useState(false);
+  const [writerInitialTopic, setWriterInitialTopic] = useState('');
   const [isGeneratorOpen, setIsGeneratorOpen] = useState(false);
+  const [showAiBanner, setShowAiBanner] = useState(() => {
+    const saved = localStorage.getItem('tebarmedia_show_ai_banner');
+    return saved !== 'false';
+  });
 
   // User session state (persistent redaktur session on Tebarmedia)
   const [currentUser, setCurrentUser] = useState<{ name: string; role: string; email: string } | null>(() => {
@@ -76,15 +84,19 @@ export default function App() {
     checkApiStatus();
   }, []);
 
-  // Filter lists based on category and searches
+  // Filter lists based on category, searches, and selected Kepri kabupaten/kota
   const filteredArticles = articles.filter((article) => {
     const matchesCategory = activeCategory === 'Semua Berita' || article.category === activeCategory;
+    const matchesKabupatenKota = !selectedKabupatenKota || 
+      (selectedKabupatenKota === 'Kepulauan Riau' 
+        ? !!article.kabupatenKota 
+        : article.kabupatenKota === selectedKabupatenKota);
     const matchesSearch = searchQuery.trim() === '' || 
       article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       article.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
       article.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
       article.author.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+    return matchesCategory && matchesKabupatenKota && matchesSearch;
   });
 
   // Calculate top featured article (must have highest view rate, or use first in list)
@@ -139,11 +151,12 @@ export default function App() {
     setSelectedArticleId(newArticle.id);
   };
 
-  const handleOpenWriter = () => {
+  const handleOpenWriter = (initialTopic?: string) => {
     if (!currentUser) {
       setLoginLockMessage('Harap masuk ruang redaksi terlebih dahulu untuk mengakses fitur kepenulisan jurnalisme AI!');
       setIsLoginModalOpen(true);
     } else {
+      setWriterInitialTopic(initialTopic || '');
       setIsGeneratorOpen(true);
     }
   };
@@ -280,40 +293,246 @@ export default function App() {
               className="max-w-7xl mx-auto px-4 py-8 space-y-8"
               id="homepage-view"
             >
-              {/* Category Horizontal Selectors Bar */}
-              <div className="flex items-center gap-2 overflow-x-auto pb-3 -mx-4 px-4 scrollbar-none border-b border-gray-100" id="category-scroller">
-                <SlidersHorizontal className="w-4 h-4 text-gray-400 flex-shrink-0" />
-                {categories.map((cat) => {
-                  const isActive = activeCategory === cat;
-                  return (
+              {/* Category Horizontal Selectors Bar Wrapper */}
+              <div className="relative" id="category-bar-wrapper">
+                <div className="flex items-center gap-2 overflow-x-auto pb-3 -mx-4 px-4 scrollbar-none border-b border-gray-100" id="category-scroller">
+                  <SlidersHorizontal className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                  {categories.map((cat) => {
+                    const isActive = activeCategory === cat;
+                    return (
+                      <button
+                        key={cat}
+                        id={`btn-cat-filter-${cat.replace(/\s+/g, '-')}`}
+                        onClick={() => setActiveCategory(cat)}
+                        className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-150 cursor-pointer whitespace-nowrap border ${
+                          isActive 
+                            ? 'bg-[#2B2455] text-white border-[#2B2455] shadow-xs' 
+                            : 'bg-white text-gray-600 border-gray-150 hover:bg-gray-50'
+                        }`}
+                      >
+                        {cat}
+                      </button>
+                    );
+                  })}
+
+                  {/* CUSTOM DAERAH DROPDOWN TRIGGERS NEXT TO OPINI */}
+                  <div className="relative inline-block" id="daerah-dropdown-wrapper">
                     <button
-                      key={cat}
-                      id={`btn-cat-filter-${cat.replace(/\s+/g, '-')}`}
-                      onClick={() => setActiveCategory(cat)}
-                      className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-150 cursor-pointer whitespace-nowrap border ${
-                        isActive 
-                          ? 'bg-[#2B2455] text-white border-[#2B2455] shadow-xs' 
-                          : 'bg-white text-gray-600 border-gray-150 hover:bg-gray-50'
+                      onClick={() => setIsDaerahDropdownOpen(!isDaerahDropdownOpen)}
+                      className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-150 cursor-pointer whitespace-nowrap border flex items-center gap-1.5 ${
+                        selectedKabupatenKota 
+                          ? 'bg-gradient-to-r from-indigo-700 to-purple-800 text-white border-indigo-700 shadow-xs' 
+                          : 'bg-white text-gray-700 border-gray-150 hover:bg-gray-50'
                       }`}
+                      id="btn-daerah-dropdown-trigger"
                     >
-                      {cat}
+                      <MapPin className={`w-3.5 h-3.5 ${selectedKabupatenKota ? 'text-purple-200' : 'text-gray-400'}`} />
+                      <span>{selectedKabupatenKota ? `Daerah: ${selectedKabupatenKota}` : 'Pilih Daerah'}</span>
+                      <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${isDaerahDropdownOpen ? 'rotate-180' : ''}`} />
                     </button>
-                  );
-                })}
+                  </div>
+                </div>
+
+                {/* THE DROPDOWN CONTENT - Positioned carefully using absolute, high z-index and styled beautifully */}
+                {isDaerahDropdownOpen && (
+                  <>
+                    {/* Click outside overlay */}
+                    <div 
+                      className="fixed inset-0 z-40 bg-transparent" 
+                      onClick={() => setIsDaerahDropdownOpen(false)} 
+                    />
+                    
+                    <div 
+                      className="absolute left-4 sm:left-auto right-4 md:right-0 mt-2 w-72 rounded-2xl bg-white border border-gray-100 shadow-xl z-50 p-4 slide-in-top"
+                      id="daerah-dropdown-menu"
+                    >
+                      <div className="flex items-center justify-between border-b border-gray-100 pb-2.5 mb-2.5">
+                        <span className="text-[11px] font-sans font-extrabold text-gray-400 uppercase tracking-widest flex items-center gap-1">
+                          <Compass className="w-3.5 h-3.5 text-[#7E007E]" />
+                          PORTAL DAERAH KEPRI
+                        </span>
+                        <button 
+                          onClick={() => setIsDaerahDropdownOpen(false)}
+                          className="p-1 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+
+                      <div className="space-y-1 max-h-64 overflow-y-auto scrollbar-thin pr-1">
+                        {/* Reset / All Regions */}
+                        <button
+                          onClick={() => {
+                            setSelectedKabupatenKota(null);
+                            setIsDaerahDropdownOpen(false);
+                          }}
+                          className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors ${
+                            !selectedKabupatenKota 
+                              ? 'bg-[#7E007E]/10 text-[#7E007E] font-bold' 
+                              : 'text-gray-700 hover:bg-slate-50'
+                          }`}
+                        >
+                          <span>🌍 Semua Wilayah (Saring Non-Daerah)</span>
+                          {!selectedKabupatenKota && <Check className="w-3.5 h-3.5 text-[#7E007E]" />}
+                        </button>
+
+                        {/* Kepulauan Riau (Kepri) - Parental filter */}
+                        <button
+                          onClick={() => {
+                            setSelectedKabupatenKota('Kepulauan Riau');
+                            setIsDaerahDropdownOpen(false);
+                          }}
+                          className={`w-full text-left px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between transition-colors ${
+                            selectedKabupatenKota === 'Kepulauan Riau' 
+                              ? 'bg-indigo-50 text-indigo-700 font-bold' 
+                              : 'text-gray-700 hover:bg-slate-50'
+                          }`}
+                        >
+                          <div className="flex flex-col">
+                            <span className="font-bold">🌴 Kepulauan Riau (Kepri)</span>
+                            <span className="text-[9px] text-gray-400 font-normal">Tampilkan seluruh 7 kabupaten/kota</span>
+                          </div>
+                          {selectedKabupatenKota === 'Kepulauan Riau' && <Check className="w-3.5 h-3.5 text-indigo-600" />}
+                        </button>
+
+                        <div className="border-t border-gray-50 my-2 pt-1" />
+                        <span className="block text-[9px] font-bold text-gray-400 px-3 pb-1 uppercase tracking-wider font-sans">Kabupaten & Kota</span>
+
+                        {[
+                          { name: 'Kota Batam', icon: '🏙️' },
+                          { name: 'Kota Tanjungpinang', icon: '🏛️' },
+                          { name: 'Kabupaten Bintan', icon: '🏖️' },
+                          { name: 'Kabupaten Karimun', icon: '⚓' },
+                          { name: 'Kabupaten Natuna', icon: '🏝️' },
+                          { name: 'Kabupaten Kepulauan Anambas', icon: '⛵' },
+                          { name: 'Kabupaten Lingga', icon: '⛰️' },
+                        ].map((reg) => {
+                          const isRegActive = selectedKabupatenKota === reg.name;
+                          return (
+                            <button
+                              key={reg.name}
+                              onClick={() => {
+                                setSelectedKabupatenKota(reg.name);
+                                setIsDaerahDropdownOpen(false);
+                              }}
+                              className={`w-full text-left px-3 py-2 rounded-xl text-xs font-medium flex items-center justify-between transition-colors ${
+                                isRegActive 
+                                  ? 'bg-purple-50 text-purple-700 font-bold' 
+                                  : 'text-gray-700 hover:bg-slate-50'
+                              }`}
+                            >
+                              <span className="flex items-center gap-2">
+                                <span className="text-sm">{reg.icon}</span>
+                                <span>{reg.name}</span>
+                              </span>
+                              {isRegActive && <Check className="w-3.5 h-3.5 text-purple-600" />}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
 
+
+              {/* Showcase AI Powered Badge & Explanation Banner */}
+              {showAiBanner && (
+                <div 
+                  className="relative overflow-hidden bg-gradient-to-r from-indigo-950 via-[#2B2455] to-[#7E007E] text-white rounded-2xl p-6 sm:p-8 shadow-md border border-purple-500/10"
+                  id="ai-platform-banner"
+                >
+                  {/* Glowing ambient backgrounds */}
+                  <div className="absolute top-0 right-0 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl -mr-20 -mt-20 pointer-events-none" />
+                  <div className="absolute bottom-0 left-0 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl -ml-20 -mb-20 pointer-events-none" />
+
+                  <button 
+                    onClick={() => {
+                      setShowAiBanner(false);
+                      localStorage.setItem('tebarmedia_show_ai_banner', 'false');
+                    }}
+                    className="absolute top-4 right-4 p-1.5 rounded-full hover:bg-white/10 text-white/70 hover:text-white transition-colors cursor-pointer"
+                    title="Tutup Pengumuman"
+                    id="btn-close-ai-banner"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+
+                  <div className="relative z-10 max-w-4xl space-y-6">
+                    <div className="flex items-center gap-2" id="banner-badge">
+                      <span className="flex items-center gap-1.5 bg-[#7E007E] text-white font-bold text-[10px] sm:text-xs px-3 py-1 rounded-full uppercase tracking-wider animate-pulse shadow-sm">
+                        <Sparkles className="w-3.5 h-3.5 text-purple-200 fill-white/10" />
+                        AI-AUTOMATED MEDIA PLATFORM
+                      </span>
+                      <span className="bg-white/10 text-purple-200 font-bold text-[10px] sm:text-xs px-3 py-1 rounded-full uppercase tracking-wider">
+                        Sistem Jurnalisme Cerdas
+                      </span>
+                    </div>
+
+                    <div className="space-y-2">
+                      <h2 className="text-xl sm:text-2xl md:text-3xl font-sans font-extrabold tracking-tight leading-tight">
+                        Pemerataan Informasi Berbasis Otomatisasi AI 🤖
+                      </h2>
+                      <p className="text-slate-200 text-xs sm:text-sm leading-relaxed max-w-3xl">
+                        Tebarmedia hadir sebagai pelopor platform berita nasional pertama yang memanfaatkan sepenuhnya <strong className="text-white">Kecerdasan Buatan (Artificial Intelligence)</strong> untuk memproses, menyusun draf laporan jurnalisme daerah, menerbitkannya secara otomatis, serta memberdayakan penelusuran fakta secara real-time. Ditenagai asisten redaktur <strong className="text-white">Google Gemini API</strong>, setiap berita diproduksi demi menjamin arus informasi yang berimbang, adil, dan merata untuk kesejahteraan tanah air.
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                      <div className="bg-white/5 border border-white/5 rounded-xl p-4 flex gap-3" id="banner-feat-1">
+                        <div className="w-8 h-8 rounded-lg bg-[#7E007E]/30 shrink-0 flex items-center justify-center text-purple-300">
+                          <Cpu className="w-4.5 h-4.5" />
+                        </div>
+                        <div className="space-y-1">
+                          <h4 className="text-xs font-bold text-white">Sintesis Berita Kilat</h4>
+                          <p className="text-[11px] text-slate-300 leading-normal">Berita dirangkum langsung secara presisi dan adil dari fakta lapangan jurnalis daerah oleh asisten AI.</p>
+                        </div>
+                      </div>
+
+                      <div className="bg-white/5 border border-white/5 rounded-xl p-4 flex gap-3" id="banner-feat-2">
+                        <div className="w-8 h-8 rounded-lg bg-[#7E007E]/30 shrink-0 flex items-center justify-center text-purple-300">
+                          <MessageSquare className="w-4.5 h-4.5" />
+                        </div>
+                        <div className="space-y-1">
+                          <h4 className="text-xs font-bold text-white">Redaktur AI Interaktif</h4>
+                          <p className="text-[11px] text-slate-300 leading-normal">Berkomunikasi dengan bot diskusi di akhir setiap artikel untuk membedah berita lebih lanjut.</p>
+                        </div>
+                      </div>
+
+                      <div className="bg-white/5 border border-white/5 rounded-xl p-4 flex gap-3" id="banner-feat-3">
+                        <div className="w-8 h-8 rounded-lg bg-[#7E007E]/30 shrink-0 flex items-center justify-center text-purple-300">
+                          <Layers className="w-4.5 h-4.5" />
+                        </div>
+                        <div className="space-y-1">
+                          <h4 className="text-xs font-bold text-white">Arus Informasi Merata</h4>
+                          <p className="text-[11px] text-slate-300 leading-normal">Memperjuangkan keadilan data dengan mengekspos peristiwa daerah tanpa dominasi metropolitan.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Filtering summary headline */}
-              {(searchQuery || activeCategory !== 'Semua Berita') && (
+              {(searchQuery || activeCategory !== 'Semua Berita' || selectedKabupatenKota) && (
                 <div className="flex items-center justify-between p-4 bg-white border border-gray-100 rounded-2xl shadow-xs animate-fade-in" id="filtering-indicator">
                   <div className="text-xs font-semibold text-gray-500">
-                    Kategori & keyword aktif: <span className="text-[#7E007E] font-bold">{activeCategory}</span>
-                    {searchQuery && <span> • kata kunci <span className="text-gray-800 font-bold">"{searchQuery}"</span></span>}
-                    <span className="ml-2 py-0.5 px-2 bg-slate-50 text-slate-500 rounded-full font-mono text-[10px] font-bold">({filteredArticles.length} Berita)</span>
+                    {activeCategory !== 'Semua Berita' && (
+                      <span>Kategori: <span className="text-[#7E007E] font-bold">{activeCategory}</span> • </span>
+                    )}
+                    {selectedKabupatenKota && (
+                      <span>Daerah Kepri: <span className="text-indigo-600 font-bold">{selectedKabupatenKota}</span> • </span>
+                    )}
+                    {searchQuery && (
+                      <span>Kata kunci: <span className="text-gray-800 font-bold">"{searchQuery}"</span> • </span>
+                    )}
+                    <span className="ml-1 py-0.5 px-2 bg-slate-50 text-slate-500 rounded-full font-mono text-[10px] font-bold">({filteredArticles.length} Berita)</span>
                   </div>
                   <button 
                     onClick={() => {
                       setSearchQuery('');
                       setActiveCategory('Semua Berita');
+                      setSelectedKabupatenKota(null);
                     }}
                     id="btn-reset-filters"
                     className="text-xs font-bold text-[#7E007E] hover:underline cursor-pointer"
@@ -471,6 +690,7 @@ export default function App() {
         onClose={() => setIsGeneratorOpen(false)}
         onArticleCreated={handleArticleCreated}
         apiConfigured={apiConfigured}
+        initialTopic={writerInitialTopic}
       />
 
       {/* REVOLUTIONARY REDAKSI LOGIN MODAL WITH HIGH FIDELITY DESIGN */}
@@ -550,12 +770,11 @@ export default function App() {
                 </div>
 
                 {/* Indonesian Credential Tips panel */}
-                <div className="p-3 bg-slate-50 border border-slate-100 rounded-xl space-y-1" id="login-helper-tips">
-                  <span className="text-[9px] font-mono font-bold text-slate-400 uppercase tracking-wider block">Kunci Demo Redaktur:</span>
-                  <div className="text-[10px] text-slate-500 font-medium leading-relaxed">
-                    Nama akun: <strong className="font-mono text-slate-700 bg-white border border-slate-150 px-1 py-0.2 rounded">redaktur</strong> atau <strong className="font-mono text-slate-700 bg-white border border-slate-150 px-1 py-0.2 rounded">jurnalis</strong><br />
-                    Sandi rahasia: <strong className="font-mono text-slate-700 bg-white border border-slate-150 px-1 py-0.2 rounded">tebar</strong>
-                  </div>
+                <div className="p-3 bg-slate-50 border border-slate-105 rounded-xl space-y-1 text-center" id="login-helper-tips">
+                  <span className="text-[10px] font-sans font-extrabold text-[#7E007E] uppercase tracking-wider block">🔒 Hak Akses Khusus Redaktur</span>
+                  <p className="text-[10px] text-slate-500 font-medium leading-relaxed">
+                    Sistem penulisan jurnalisme AI ini diproteksi secara ketat. Masukkan kredensial dan kata sandi rahasia yang hanya diketahui oleh redaktur internal Tebarmedia.
+                  </p>
                 </div>
 
                 {loginError && (
