@@ -12,6 +12,7 @@ interface NewArticleModalProps {
   onArticleCreated: (newArticle: Article) => void;
   apiConfigured: boolean;
   initialTopic?: string;
+  defaultKabupatenKota?: string | null;
 }
 
 const NEWSROOM_STEPS = [
@@ -42,7 +43,8 @@ export default function NewArticleModal({
   onClose, 
   onArticleCreated,
   apiConfigured,
-  initialTopic = ''
+  initialTopic = '',
+  defaultKabupatenKota = null
 }: NewArticleModalProps) {
   // Navigation tabs within writer modal
   const [activeTab, setActiveTab] = useState<'write' | 'viral'>('write');
@@ -74,6 +76,7 @@ export default function NewArticleModal({
     content: string;
     category: NewsCategory;
     imageUrl: string;
+    kabupatenKota?: string;
   } | null>(null);
 
   // Cycle newsroom animation messages during generation
@@ -155,13 +158,26 @@ export default function NewArticleModal({
         const categoryForImage = generated.category || 'Nasional';
         const imageUrl = imageThemes[categoryForImage] || `https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&q=80&w=800`;
 
+        let draftKecamatan: string | undefined = defaultKabupatenKota || undefined;
+        if (!draftKecamatan) {
+          const lowerTopic = selectedTopic.toLowerCase();
+          if (lowerTopic.includes('batam')) draftKecamatan = 'Kota Batam';
+          else if (lowerTopic.includes('tanjungpinang')) draftKecamatan = 'Kota Tanjungpinang';
+          else if (lowerTopic.includes('bintan')) draftKecamatan = 'Kabupaten Bintan';
+          else if (lowerTopic.includes('karimun')) draftKecamatan = 'Kabupaten Karimun';
+          else if (lowerTopic.includes('natuna')) draftKecamatan = 'Kabupaten Natuna';
+          else if (lowerTopic.includes('anambas')) draftKecamatan = 'Kabupaten Kepulauan Anambas';
+          else if (lowerTopic.includes('lingga')) draftKecamatan = 'Kabupaten Lingga';
+        }
+
         // Advance to Draft Review screen instead of publishing immediately
         setGeneratedDraft({
           title: generated.title || `Laporan Khusus: Potensi ${selectedTopic}`,
           summary: generated.summary || `Analisis berimbang dan komprehensif mengenai perputaran informasi seputar ${selectedTopic}.`,
           content: generated.content || `Draf berita komprehensif sedang diramu...`,
           category: (generated.category as NewsCategory) || 'Nasional',
-          imageUrl: imageUrl
+          imageUrl: imageUrl,
+          kabupatenKota: draftKecamatan
         });
       } else {
         setErrorMsg(data.error || 'Gagal merancang draf berita AI.');
@@ -195,7 +211,8 @@ export default function NewArticleModal({
       likes: Math.floor(Math.random() * 10) + 1,
       views: Math.floor(Math.random() * 50) + 50,
       comments: [],
-      isAiGenerated: true
+      isAiGenerated: true,
+      kabupatenKota: generatedDraft.kabupatenKota
     };
 
     onArticleCreated(newArticle);
@@ -343,6 +360,25 @@ export default function NewArticleModal({
                         <option value="https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&q=80&w=1200">Redaksi Jurnalisme Umum</option>
                       </select>
                     </div>
+                  </div>
+
+                  {/* Kabupaten/Kota Selector Row */}
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-gray-900 block">Lokasi Daerah Kepulauan Riau (Optional):</label>
+                    <select
+                      value={generatedDraft.kabupatenKota || ''}
+                      onChange={(e) => setGeneratedDraft({ ...generatedDraft, kabupatenKota: e.target.value || undefined })}
+                      className="w-full px-3 py-2 bg-white rounded-xl border border-gray-200 text-xs focus:ring-2 focus:ring-[#7E007E]/20 text-gray-800 font-medium"
+                    >
+                      <option value="">-- Bukan Wilayah Kepri (Umum) --</option>
+                      <option value="Kota Batam">🏙️ Kota Batam</option>
+                      <option value="Kota Tanjungpinang">🏛️ Kota Tanjungpinang</option>
+                      <option value="Kabupaten Bintan">🏖️ Kabupaten Bintan</option>
+                      <option value="Kabupaten Karimun">⚓ Kabupaten Karimun</option>
+                      <option value="Kabupaten Natuna">🏝️ Kabupaten Natuna</option>
+                      <option value="Kabupaten Kepulauan Anambas">⛵ Kabupaten Kepulauan Anambas</option>
+                      <option value="Kabupaten Lingga">⛰️ Kabupaten Lingga</option>
+                    </select>
                   </div>
 
                   {/* Title Input */}

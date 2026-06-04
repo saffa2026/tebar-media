@@ -691,6 +691,7 @@ export default function App() {
         onArticleCreated={handleArticleCreated}
         apiConfigured={apiConfigured}
         initialTopic={writerInitialTopic}
+        defaultKabupatenKota={selectedKabupatenKota}
       />
 
       {/* REVOLUTIONARY REDAKSI LOGIN MODAL WITH HIGH FIDELITY DESIGN */}
